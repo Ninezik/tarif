@@ -12,7 +12,7 @@ nipos.location_data_created__custom_field__nopen,
 nipos.custom_field__destination_nopen,
 nipos.connote__connote_service,
 round(nipos.connote__connote_service_price /
-(ceiling(connote__chargeable_weight/10)*10),0) AS nilai,
+floor(nipos.connote__actual_weight),0) AS nilai,
 COUNT(*) AS jumlah,
 ROW_NUMBER() OVER (
 PARTITION BY
