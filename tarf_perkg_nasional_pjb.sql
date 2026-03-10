@@ -1,11 +1,9 @@
-select  location_data_created__custom_field__nopen,
+select location_data_created__custom_field__nopen,
 custom_field__destination_nopen,
 connote__connote_service,
 nilai,
 jumlah,
 rank_service
-FROM
-(select *
 FROM
 (select*,
 row_number() OVER(partition by location_data_created__custom_field__nopen,
@@ -36,5 +34,4 @@ GROUP BY 1,2,3,4,5,6
 --limit 10
 )t1
 )t2
-where rank_service=1)
-t3
+where rank_service=1
