@@ -1,0 +1,10 @@
+select date(t1.connote__created_at)connote__created_at_shopee ,
+t1.connote__connote_service connote__connote_service_shopee,
+t1.customer_code customer_code_shopee,
+t2.location_data_created__custom_field__nopen location_data_created__custom_field__nopen_shopee,
+t2.custom_field__destination_nopen custom_field__destination_nopen_shopee,
+SUM(t1.goods_value*0.5/100)fee_cod_shopee
+from nipos.v_nipos_cod_shopee_dashboard t1
+join nipos.nipos t2
+on t1.connote__connote_code =t2.connote__connote_code
+group by 1,2,3,4,5
