@@ -3,11 +3,15 @@ nipos.connote__connote_service ,
 customer_code,
 nipos.location_data_created__custom_field__nopen,
 nipos.location_data_created__custom_field__nokprk ,
-nipos.custom_field__destination_nopen,
+case when nipos.connote__create_from ='POSINDOOUTGOING' THEN
+coalesce(nipos.custom_field__destination_nopen ,nipos.connote__connote_receiver_zipcode )||'-'||nipos.connote__zone_code_to
+ELSE custom_field__destination_nopen END as custom_field__destination_nopen,
 nipos.custom_field__destination_kprk ,
 connote__create_from,
 COUNT(nipos.connote__connote_code)connote__connote_code,
-SUM(nipos.connote__connote_service_price + nipos.connote__connote_surcharge_amount) pendapatan
+SUM(nipos.connote__connote_service_price + nipos.connote__connote_surcharge_amount) pendapatan,
+SUM(case when customer_code ='DAGSHOPEE04120A' then 0
+else custom_field__fee_value end) fee_cod
 FROM nipos.nipos
 WHERE (customer_code IN (
 'UKMTLKMPADI02120A',
@@ -36,7 +40,7 @@ WHERE (customer_code IN (
 )
 OR customer_code IS null)
 and nipos.connote__connote_state not in ('CANCEL','PENDING')
-and nipos.connote__connote_service not in ('LNINCOMING')
---and nipos.connote__create_from!='POSINDOUTGOING'
+and nipos.connote__connote_service !='LNINCOMING'
 and nipos.connote__created_at >'20240101'
+and nipos.connote__connote_amount >0
 group by 1,2,3,4,5,6,7,8
