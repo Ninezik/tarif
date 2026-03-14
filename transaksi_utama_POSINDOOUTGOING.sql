@@ -1,7 +1,7 @@
-SELECT 
+SELECT
 date(nipos.connote__created_at)connote__created_at,
 nipos.connote__connote_service ,
-coalesce(nipos.custom_field__destination_nopen ,nipos.connote__connote_receiver_zipcode )||'-'||nipos.connote__zone_code_to custom_field__destination_nopen,
+nipos.connote__zone_code_to as custom_field__destination_nopen ,
 nipos.custom_field__destination_kprk ,
 coalesce(location_data_created__custom_field__nopen,split_part(connote__location_name,' ', regexp_count(connote__location_name,' ') + 1))location_data_created__custom_field__nopen,
 nipos.location_data_created__custom_field__nokprk ,
