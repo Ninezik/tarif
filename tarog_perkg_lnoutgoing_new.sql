@@ -11,7 +11,7 @@ FROM (
         select
         date_trunc('month',nipos.connote__created_at )connote__created_at ,
             nipos.connote__connote_service,
-            coalesce(location_data_created__custom_field__nopen,split_part(connote__location_name,' ', regexp_count(connote__location_name,' ') + 1))location_data_created__custom_field__nopen,
+coalesce(location_data_created__custom_field__nopen,split_part(connote__location_name,' ', regexp_count(connote__location_name,' ') + 1))location_data_created__custom_field__nopen,
             nipos.connote__zone_code_to AS custom_field__destination_nopen,
             round(nipos.connote__connote_service_price /
             GREATEST(GREATEST(connote__actual_weight, connote__chargeable_weight),1),0)nilai,
