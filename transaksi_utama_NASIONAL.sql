@@ -1,18 +1,24 @@
-SELECT 
+SELECT
 date(nipos.connote__created_at)connote__created_at,
 nipos.connote__connote_service ,
 coalesce(custom_field__destination_nopen,
 split_part(
-    coalesce(custom_field__destination_location,connote__currentlocation__name),
-    ' ',
-    regexp_count(
-        coalesce(custom_field__destination_location,connote__currentlocation__name),
-        ' '
-    ) + 1)
+coalesce(nipos.nipos.connote__zone_code_to ,connote__currentlocation__name),
+' ',
+regexp_count(
+coalesce(nipos.nipos.connote__zone_code_to ,connote__currentlocation__name),
+' '
+) + 1)
 )custom_field__destination_nopen,
-nipos.custom_field__destination_kprk ,
-coalesce(location_data_created__custom_field__nopen,split_part(connote__location_name,' ', regexp_count(connote__location_name,' ') + 1))location_data_created__custom_field__nopen,
-nipos.location_data_created__custom_field__nokprk ,
+coalesce(location_data_created__custom_field__nopen,
+split_part(
+coalesce(connote__zone_code_from,connote__location_name),
+' ',
+regexp_count(
+coalesce(connote__zone_code_from ,connote__location_name),
+' '
+) + 1)
+)location_data_created__custom_field__nopen,
 COUNT(nipos.connote__connote_code)connote__connote_code,
 SUM(nipos.connote__connote_service_price + nipos.connote__connote_surcharge_amount) pendapatan
 FROM nipos.nipos
@@ -47,4 +53,4 @@ and nipos.connote__connote_service !='LNINCOMING'
 and nipos.connote__create_from !='POSINDOOUTGOING'
 and nipos.connote__created_at >'20240101'
 and nipos.connote__connote_amount >0
-group by 1,2,3,4,5,6
+group by 1,2,3,4
