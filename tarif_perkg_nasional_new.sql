@@ -1,31 +1,39 @@
 SELECT *
 FROM (
-    SELECT *,
-    row_number() OVER(
-        PARTITION BY connote__connote_service,
-        location_data_created__custom_field__nopen,
-        custom_field__destination_nopen
-        ORDER BY connote__created_at desc ,jumlah DESC,nilai DESC
-    ) AS urutan
-    FROM (
-        select
-        date_trunc('month',nipos.connote__created_at )connote__created_at ,
-            nipos.connote__connote_service,
-            coalesce(location_data_created__custom_field__nopen,split_part(connote__location_name,' ', regexp_count(connote__location_name,' ') + 1))location_data_created__custom_field__nopen,
-            coalesce(custom_field__destination_nopen,
+SELECT *,
+row_number() OVER(
+PARTITION BY connote__connote_service,
+location_data_created__custom_field__nopen,
+custom_field__destination_nopen
+ORDER BY connote__created_at desc ,jumlah DESC,nilai DESC
+) AS urutan
+FROM (
+select
+date_trunc('month',nipos.connote__created_at )connote__created_at ,
+nipos.connote__connote_service,
+coalesce(location_data_created__custom_field__nopen,
 split_part(
-    coalesce(custom_field__destination_location,connote__currentlocation__name),
-    ' ',
-    regexp_count(
-        coalesce(custom_field__destination_location,connote__currentlocation__name),
-        ' '
-    ) + 1)
+coalesce(connote__zone_code_from,connote__location_name),
+' ',
+regexp_count(
+coalesce(connote__zone_code_from ,connote__location_name),
+' '
+) + 1)
+)location_data_created__custom_field__nopen,
+coalesce(custom_field__destination_nopen,
+split_part(
+coalesce(nipos.nipos.connote__zone_code_to ,connote__currentlocation__name),
+' ',
+regexp_count(
+coalesce(nipos.nipos.connote__zone_code_to ,connote__currentlocation__name),
+' '
+) + 1)
 )custom_field__destination_nopen,
-            round(nipos.connote__connote_service_price /
-            GREATEST(GREATEST(connote__actual_weight, connote__chargeable_weight),1),0)nilai,
-            COUNT(*) AS jumlah
-        FROM nipos.nipos
-        WHERE (customer_code IN (
+round(nipos.connote__connote_service_price /
+GREATEST(GREATEST(connote__actual_weight, connote__chargeable_weight),1),0)nilai,
+COUNT(*) AS jumlah
+FROM nipos.nipos
+WHERE (customer_code IN (
 'UKMTLKMPADI02120A',
 'TELTSELNTE02100A',
 'RBTOZIYAD04571A',
@@ -51,11 +59,11 @@ split_part(
 'BANKBRI02100A'
 )
 OR customer_code IS null)
-        and  nipos.connote__connote_state NOT IN ('CANCEL','PENDING')
-        AND nipos.connote__create_from != 'POSINDOOUTGOING'
-        and nipos.connote__connote_service !='LNINCOMING'
-        AND nipos.connote__created_at > '20240101'
-        GROUP BY 1,2,3,4,5
-    ) t1
+and nipos.connote__connote_state NOT IN ('CANCEL','PENDING')
+AND nipos.connote__create_from != 'POSINDOOUTGOING'
+and nipos.connote__connote_service !='LNINCOMING'
+AND nipos.connote__created_at > '20240101'
+GROUP BY 1,2,3,4,5
+) t1
 ) t2
 WHERE urutan = 1
