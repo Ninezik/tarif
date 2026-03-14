@@ -3,6 +3,7 @@ date(nipos.connote__created_at)connote__created_at,
 nipos.connote__connote_service ,
 coalesce(nipos.custom_field__destination_nopen ,nipos.connote__connote_receiver_zipcode )||'-'||nipos.connote__zone_code_to custom_field__destination_nopen,
 nipos.custom_field__destination_kprk ,
+coalesce(location_data_created__custom_field__nopen,split_part(connote__location_name,' ', regexp_count(connote__location_name,' ') + 1))location_data_created__custom_field__nopen,
 nipos.location_data_created__custom_field__nokprk ,
 COUNT(nipos.connote__connote_code)connote__connote_code,
 SUM(nipos.connote__connote_service_price + nipos.connote__connote_surcharge_amount) pendapatan
@@ -38,4 +39,4 @@ and nipos.connote__connote_service !='LNINCOMING'
 and nipos.connote__create_from ='POSINDOOUTGOING'
 and nipos.connote__created_at >'20240101'
 and nipos.connote__connote_amount >0
-group by 1,2,3,4,5
+group by 1,2,3,4,5,6
